@@ -8,7 +8,7 @@ Sistema completo de gerenciamento de biblioteca pessoal com autenticação JWT, 
 
 | Camada | Tecnologia |
 |---|---|
-| Backend | Spring Boot 3.2, Java 17 |
+| Backend | Spring Boot 4.0, Java 25 |
 | Banco de Dados | MongoDB 7.0 |
 | Autenticação | JWT (jjwt 0.12) |
 | Testes | JUnit 5, Testcontainers, WireMock (VCR) |
@@ -36,7 +36,7 @@ src/main/java/com/library/
 ## 🚀 Como Executar
 
 ### Pré-requisitos
-- Java 17+
+- Java 25
 - Docker e Docker Compose (para MongoDB)
 - Maven 3.8+
 

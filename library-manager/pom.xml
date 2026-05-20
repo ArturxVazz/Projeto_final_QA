@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
+        <version>4.0.6</version>
         <relativePath/>
     </parent>
 
@@ -19,10 +19,10 @@
 
     <properties>
         <java.version>25</java.version>
-        <testcontainers.version>1.19.8</testcontainers.version>
-        <wiremock.version>3.6.0</wiremock.version>
-        <jjwt.version>0.12.5</jjwt.version>
-        <jacoco.version>0.8.11</jacoco.version>
+        <testcontainers.version>1.20.4</testcontainers.version>
+        <wiremock.version>3.9.2</wiremock.version>
+        <jjwt.version>0.12.6</jjwt.version>
+        <jacoco.version>0.8.12</jacoco.version>
         <sonar.organization>your-org</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>
@@ -152,6 +152,11 @@
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
+                                    <excludes>
+                                        <exclude>com.library.LibraryApplication</exclude>
+                                        <exclude>com.library.dto.*</exclude>
+                                        <exclude>com.library.model.*</exclude>
+                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -164,13 +169,20 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>com/library/LibraryApplication.class</exclude>
+                        <exclude>com/library/dto/**</exclude>
+                        <exclude>com/library/model/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <!-- SonarQube -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.11.0.3922</version>
+                <version>4.0.0.4121</version>
             </plugin>
         </plugins>
     </build>

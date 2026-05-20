@@ -41,7 +41,7 @@ class OpenLibraryServiceVCRTest {
     void shouldReturnBooksForValidQuery() throws Exception {
         // Gravação da cassete VCR (resposta da API gravada)
         wireMockServer.stubFor(get(urlPathEqualTo("/search.json"))
-                .withQueryParam("q", equalTo("Harry+Potter"))
+                .withQueryParam("q", equalTo("Harry Potter"))
                 .withQueryParam("limit", equalTo("5"))
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -75,7 +75,7 @@ class OpenLibraryServiceVCRTest {
         assertThat(results.get(0).getPublishYear()).isEqualTo(1997);
 
         wireMockServer.verify(getRequestedFor(urlPathEqualTo("/search.json"))
-                .withQueryParam("q", equalTo("Harry+Potter")));
+                .withQueryParam("q", equalTo("Harry Potter")));
     }
 
     @Test
@@ -115,7 +115,7 @@ class OpenLibraryServiceVCRTest {
     @DisplayName("VCR - Deve tratar livro sem autor e sem ISBN corretamente (cassete: partial_data)")
     void shouldHandleBookWithMissingFields() throws Exception {
         wireMockServer.stubFor(get(urlPathEqualTo("/search.json"))
-                .withQueryParam("q", equalTo("Livro+sem+dados"))
+                .withQueryParam("q", equalTo("Livro sem dados"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
