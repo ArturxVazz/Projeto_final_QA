@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Pessoal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0e0e0f;
+            --surface: #18181b;
+            --surface2: #222226;
+            --border: #2e2e33;
+            --accent: #c9a96e;
+            --accent-dim: #a07a40;
+            --text: #e8e6e0;
+            --text-muted: #8a8880;
+            --danger: #e05c5c;
+            --success: #5cba7a;
+            --reading: #6b9bd2;
+            --want: #9b7fd4;
+            --read: #5cba7a;
+            --radius: 10px;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 15px;
+        }
+
+        /* ── Auth Screen ── */
+        #auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 60% 20%, #1a1408 0%, var(--bg) 70%);
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        }
+
+        .auth-logo {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 36px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 28px;
+            gap: 0;
+        }
+
+        .auth-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all var(--transition);
+        }
+
+        .auth-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 14px;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
+        select option { background: var(--surface2); }
+
+        textarea { resize: vertical; min-height: 80px; }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0e0e0f;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover { background: #d4b278; transform: translateY(-1px); }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            width: auto;
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        .btn-sm {
+            width: auto;
+            padding: 7px 14px;
+            font-size: 13px;
+        }
+
+        .error-msg {
+            background: rgba(224,92,92,0.12);
+            border: 1px solid rgba(224,92,92,0.3);
+            color: var(--danger);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── App Shell ── */
+        #app-screen { display: none; min-height: 100vh; }
+
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 28px 20px;
+            z-index: 10;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-user {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .nav-section {
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            transition: all var(--transition);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(201,169,110,0.12); color: var(--accent); }
+
+        .nav-icon { width: 18px; text-align: center; font-size: 16px; }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            background: none;
+            border: none;
+            width: 100%;
+            transition: all var(--transition);
+        }
+
+        .logout-btn:hover { color: var(--danger); }
+
+        /* ── Main Content ── */
+        .main {
+            margin-left: 240px;
+            padding: 40px 48px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ── Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* ── Books Grid ── */
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-select { width: 160px; }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .book-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: all var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .book-card:hover {
+            border-color: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .book-status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .status-READ { background: var(--read); }
+        .status-READING { background: var(--reading); }
+        .status-WANT_TO_READ { background: var(--want); }
+
+        .book-status-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .book-title {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.3;
+            color: var(--text);
+        }
+
+        .book-author {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .book-genre {
+            display: inline-block;
+            background: rgba(201,169,110,0.1);
+            color: var(--accent);
+            border: 1px solid rgba(201,169,110,0.2);
+            border-radius: 4px;
+            font-size: 11px;
+            padding: 2px 8px;
+            margin-bottom: 12px;
+        }
+
+        .book-rating {
+            color: var(--accent);
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 8px; }
+        .empty-text { color: var(--text-muted); margin-bottom: 24px; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* ── OpenLibrary Search ── */
+        .ol-results {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ol-result {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: border-color var(--transition);
+        }
+
+        .ol-result:hover { border-color: var(--accent); }
+        .ol-result-title { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+        .ol-result-author { font-size: 12px; color: var(--text-muted); }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 14px;
+            z-index: 200;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-width: 320px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success { border-color: var(--success); color: var(--success); }
+        .toast.error { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .sidebar { width: 200px; }
+            .main { margin-left: 200px; padding: 24px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .hidden { display: none !important; }
+        .loading { opacity: 0.5; pointer-events: none; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ── -->
+<div id="auth-screen">
+    <div class="auth-card">
+        <div class="auth-logo">📚 Biblioteca</div>
+        <div class="auth-subtitle">Gerenciador de Leitura Pessoal</div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
+            <button class="auth-tab" onclick="switchAuthTab('register')">Cadastrar</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form">
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="login-username" placeholder="seu_usuario" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary" onclick="doLogin()">Entrar</button>
+            <div class="error-msg" id="login-error"></div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="hidden">
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="reg-username" placeholder="seu_usuario">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="reg-email" placeholder="voce@email.com">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="reg-password" placeholder="mínimo 6 caracteres">
+            </div>
+            <button class="btn btn-primary" onclick="doRegister()">Criar Conta</button>
+            <div class="error-msg" id="register-error"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── APP SCREEN ── -->
+<div id="app-screen">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">📚 Biblioteca</div>
+        <div class="sidebar-user" id="sidebar-username">—</div>
+
+        <div class="nav-section">Menu</div>
+        <button class="nav-item active" onclick="showView('dashboard')">
+            <span class="nav-icon">🏠</span> Início
+        </button>
+        <button class="nav-item" onclick="showView('books')">
+            <span class="nav-icon">📖</span> Meus Livros
+        </button>
+        <button class="nav-item" onclick="showView('reading')">
+            <span class="nav-icon">🔖</span> Lendo
+        </button>
+        <button class="nav-item" onclick="showView('search-ol')">
+            <span class="nav-icon">🔍</span> Buscar Livros
+        </button>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" onclick="doLogout()">
+                <span>↩</span> Sair
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Dashboard -->
+        <div id="view-dashboard">
+            <div class="page-header">
+                <h1 class="page-title">Olá, <span id="dash-username">Leitor</span> 👋</h1>
+                <button class="btn btn-primary btn-sm" onclick="openBookModal()">+ Adicionar Livro</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Livros</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Lidos</div>
+                    <div class="stat-value" id="stat-read" style="color:var(--read)">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Lendo</div>
+                    <div class="stat-value" id="stat-reading" style="color:var(--reading)">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Para Ler</div>
+                    <div class="stat-value" id="stat-want" style="color:var(--want)">0</div>
+                </div>
+            </div>
+            <div class="page-header" style="margin-bottom:16px;">
+                <h2 style="font-family:var(--font-display);font-size:20px;">Adicionados Recentemente</h2>
+            </div>
+            <div class="books-grid" id="recent-books"></div>
+        </div>
+
+        <!-- Books List -->
+        <div id="view-books" class="hidden">
+            <div class="page-header">
+                <h1 class="page-title">Meus Livros</h1>
+                <button class="btn btn-primary btn-sm" onclick="openBookModal()">+ Adicionar</button>
+            </div>
+            <div class="toolbar">
+                <input class="search-input" type="text" placeholder="🔍 Buscar por título..." oninput="filterBooks(this.value)" id="books-search">
+                <select class="filter-select" onchange="filterByStatus(this.value)">
+                    <option value="">Todos os status</option>
+                    <option value="READ">Lidos</option>
+                    <option value="READING">Lendo</option>
+                    <option value="WANT_TO_READ">Para Ler</option>
+                </select>
+            </div>
+            <div class="books-grid" id="all-books"></div>
+        </div>
+
+        <!-- Currently Reading -->
+        <div id="view-reading" class="hidden">
+            <div class="page-header">
+                <h1 class="page-title">Lendo Agora</h1>
+                <button class="btn btn-primary btn-sm" onclick="openBookModal()">+ Adicionar</button>
+            </div>
+            <div class="books-grid" id="reading-books"></div>
+        </div>
+
+        <!-- OpenLibrary Search -->
+        <div id="view-search-ol" class="hidden">
+            <div class="page-header">
+                <h1 class="page-title">Buscar na Open Library</h1>
+            </div>
+            <div style="max-width:600px;">
+                <div class="toolbar">
+                    <input class="search-input" type="text" placeholder="Título, autor ou assunto..." id="ol-search-input">
+                    <button class="btn btn-primary btn-sm" onclick="searchOpenLibrary()">Buscar</button>
+                </div>
+                <div class="ol-results" id="ol-results"></div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── BOOK MODAL ── -->
+<div class="modal-overlay" id="book-modal">
+    <div class="modal">
+        <h2 class="modal-title" id="modal-title">Adicionar Livro</h2>
+        <input type="hidden" id="modal-book-id">
+        <div class="form-group">
+            <label>Título *</label>
+            <input type="text" id="book-title" placeholder="Ex: Dom Casmurro">
+        </div>
+        <div class="form-group">
+            <label>Autor *</label>
+            <input type="text" id="book-author" placeholder="Ex: Machado de Assis">
+        </div>
+        <div class="form-group">
+            <label>ISBN</label>
+            <input type="text" id="book-isbn" placeholder="978-...">
+        </div>
+        <div class="form-group">
+            <label>Gênero</label>
+            <input type="text" id="book-genre" placeholder="Ex: Ficção, Romance...">
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            <select id="book-status">
+                <option value="WANT_TO_READ">Para Ler</option>
+                <option value="READING">Lendo</option>
+                <option value="READ">Lido</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Avaliação (1–5)</label>
+            <input type="number" id="book-rating" min="1" max="5" placeholder="Deixe em branco se não leu">
+        </div>
+        <div class="form-group">
+            <label>Notas Pessoais</label>
+            <textarea id="book-notes" placeholder="Suas anotações sobre o livro..."></textarea>
+        </div>
+        <div class="error-msg" id="modal-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost btn-sm" onclick="closeBookModal()">Cancelar</button>
+            <button class="btn btn-primary btn-sm" onclick="saveBook()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let token = localStorage.getItem('lib_token');
+let currentUser = localStorage.getItem('lib_username');
+let currentUserId = localStorage.getItem('lib_userid');
+let allBooks = [];
+
+// ── Init ──
+window.onload = () => {
+    if (token) showApp();
+};
+
+// ── Auth ──
+function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0) === (tab==='login')));
+    document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+}
+
+async function doLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const err = document.getElementById('login-error');
+    err.style.display = 'none';
+    if (!username || !password) return showError(err, 'Preencha todos os campos');
+    try {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) return showError(err, data.message || 'Erro ao fazer login');
+        saveSession(data);
+        showApp();
+    } catch(e) { showError(err, 'Erro de conexão'); }
+}
+
+async function doRegister() {
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const err = document.getElementById('register-error');
+    err.style.display = 'none';
+    if (!username || !email || !password) return showError(err, 'Preencha todos os campos');
+    try {
+        const res = await fetch('/api/auth/register', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ username, email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) return showError(err, data.message || 'Erro ao cadastrar');
+        saveSession(data);
+        showApp();
+    } catch(e) { showError(err, 'Erro de conexão'); }
+}
+
+function saveSession(data) {
+    token = data.token;
+    currentUser = data.username;
+    currentUserId = data.userId;
+    localStorage.setItem('lib_token', token);
+    localStorage.setItem('lib_username', currentUser);
+    localStorage.setItem('lib_userid', currentUserId);
+}
+
+function doLogout() {
+    localStorage.clear();
+    token = currentUser = currentUserId = null;
+    allBooks = [];
+    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+}
+
+// ── App ──
+function showApp() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    document.getElementById('sidebar-username').textContent = currentUser || '';
+    document.getElementById('dash-username').textContent = currentUser || 'Leitor';
+    loadStats();
+    loadBooks();
+    showView('dashboard');
+}
+
+function showView(view) {
+    ['dashboard','books','reading','search-ol'].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
+    });
+    document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active');
+    });
+    const idx = ['dashboard','books','reading','search-ol'].indexOf(view);
+    document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+    if (view === 'reading') loadReadingBooks();
+}
+
+// ── API ──
+async function apiFetch(url, opts = {}) {
+    const res = await fetch(API + url, {
+        ...opts,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, ...opts.headers }
+    });
+    if (res.status === 401) { doLogout(); return null; }
+    return res;
+}
+
+async function loadStats() {
+    const res = await apiFetch('/api/books/stats');
+    if (!res || !res.ok) return;
+    const s = await res.json();
+    document.getElementById('stat-total').textContent = s.total || 0;
+    document.getElementById('stat-read').textContent = s.read || 0;
+    document.getElementById('stat-reading').textContent = s.reading || 0;
+    document.getElementById('stat-want').textContent = s.wantToRead || 0;
+}
+
+async function loadBooks() {
+    const res = await apiFetch('/api/books');
+    if (!res || !res.ok) return;
+    allBooks = await res.json();
+    renderBooks(allBooks, 'all-books');
+    renderBooks(allBooks.slice(0,6), 'recent-books');
+}
+
+async function loadReadingBooks() {
+    const res = await apiFetch('/api/books?status=READING');
+    if (!res || !res.ok) return;
+    const books = await res.json();
+    renderBooks(books, 'reading-books');
+}
+
+function renderBooks(books, containerId) {
+    const el = document.getElementById(containerId);
+    if (!books || books.length === 0) {
+        el.innerHTML = `<div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <div class="empty-title">Nenhum livro aqui</div>
+            <div class="empty-text">Adicione seu primeiro livro!</div>
+            <button class="btn btn-primary btn-sm" onclick="openBookModal()">+ Adicionar Livro</button>
+        </div>`;
+        return;
+    }
+    el.innerHTML = books.map(book => `
+        <div class="book-card">
+            <div class="book-status-label">
+                <span class="book-status-dot status-${book.status}"></span>
+                <span style="color:${statusColor(book.status)}">${statusLabel(book.status)}</span>
+            </div>
+            <div class="book-title">${escHtml(book.title)}</div>
+            <div class="book-author">${escHtml(book.author)}</div>
+            ${book.genre ? `<div class="book-genre">${escHtml(book.genre)}</div>` : ''}
+            ${book.rating ? `<div class="book-rating">${'★'.repeat(book.rating)}${'☆'.repeat(5-book.rating)}</div>` : ''}
+            <div class="book-actions">
+                <button class="btn btn-ghost btn-sm" onclick="editBook('${book.id}')">Editar</button>
+                <button class="btn btn-danger" onclick="deleteBook('${book.id}')">Excluir</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function statusLabel(s) {
+    return { READ: 'Lido', READING: 'Lendo', WANT_TO_READ: 'Para Ler' }[s] || s;
+}
+
+function statusColor(s) {
+    return { READ: 'var(--read)', READING: 'var(--reading)', WANT_TO_READ: 'var(--want)' }[s] || 'var(--text-muted)';
+}
+
+function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function filterBooks(query) {
+    if (!query) { renderBooks(allBooks, 'all-books'); return; }
+    const res = await apiFetch('/api/books?search=' + encodeURIComponent(query));
+    if (res && res.ok) { const books = await res.json(); renderBooks(books, 'all-books'); }
+}
+
+async function filterByStatus(status) {
+    const url = status ? '/api/books?status=' + status : '/api/books';
+    const res = await apiFetch(url);
+    if (res && res.ok) { const books = await res.json(); renderBooks(books, 'all-books'); }
+}
+
+// ── Book Modal ──
+function openBookModal(book = null) {
+    document.getElementById('modal-title').textContent = book ? 'Editar Livro' : 'Adicionar Livro';
+    document.getElementById('modal-book-id').value = book?.id || '';
+    document.getElementById('book-title').value = book?.title || '';
+    document.getElementById('book-author').value = book?.author || '';
+    document.getElementById('book-isbn').value = book?.isbn || '';
+    document.getElementById('book-genre').value = book?.genre || '';
+    document.getElementById('book-status').value = book?.status || 'WANT_TO_READ';
+    document.getElementById('book-rating').value = book?.rating || '';
+    document.getElementById('book-notes').value = book?.notes || '';
+    document.getElementById('modal-error').style.display = 'none';
+    document.getElementById('book-modal').classList.add('active');
+}
+
+function closeBookModal() {
+    document.getElementById('book-modal').classList.remove('active');
+}
+
+async function saveBook() {
+    const id = document.getElementById('modal-book-id').value;
+    const err = document.getElementById('modal-error');
+    err.style.display = 'none';
+    const payload = {
+        title: document.getElementById('book-title').value.trim(),
+        author: document.getElementById('book-author').value.trim(),
+        isbn: document.getElementById('book-isbn').value.trim() || null,
+        genre: document.getElementById('book-genre').value.trim() || null,
+        status: document.getElementById('book-status').value,
+        rating: document.getElementById('book-rating').value ? parseInt(document.getElementById('book-rating').value) : null,
+        notes: document.getElementById('book-notes').value.trim() || null,
+    };
+    if (!payload.title || !payload.author) return showError(err, 'Título e autor são obrigatórios');
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? '/api/books/' + id : '/api/books';
+    try {
+        const res = await apiFetch(url, { method, body: JSON.stringify(payload) });
+        if (!res) return;
+        if (!res.ok) {
+            const d = await res.json();
+            return showError(err, d.message || 'Erro ao salvar');
+        }
+        closeBookModal();
+        await loadBooks();
+        await loadStats();
+        toast('Livro salvo com sucesso!', 'success');
+    } catch(e) { showError(err, 'Erro de conexão'); }
+}
+
+async function editBook(id) {
+    const book = allBooks.find(b => b.id === id);
+    if (book) openBookModal(book);
+}
+
+async function deleteBook(id) {
+    if (!confirm('Remover este livro da sua biblioteca?')) return;
+    const res = await apiFetch('/api/books/' + id, { method: 'DELETE' });
+    if (res && (res.ok || res.status === 204)) {
+        await loadBooks();
+        await loadStats();
+        toast('Livro removido', 'success');
+    }
+}
+
+// ── OpenLibrary ──
+async function searchOpenLibrary() {
+    const q = document.getElementById('ol-search-input').value.trim();
+    if (!q) return;
+    const el = document.getElementById('ol-results');
+    el.innerHTML = '<div><span class="spinner"></span> Buscando...</div>';
+    const res = await apiFetch('/api/books/search/openlibrary?q=' + encodeURIComponent(q));
+    if (!res || !res.ok) { el.innerHTML = '<div style="color:var(--danger)">Erro na busca externa.</div>'; return; }
+    const books = await res.json();
+    if (!books.length) { el.innerHTML = '<div style="color:var(--text-muted)">Nenhum resultado encontrado.</div>'; return; }
+    el.innerHTML = books.map(b => `
+        <div class="ol-result" onclick="importOLBook(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+            <div class="ol-result-title">${escHtml(b.title || 'Sem título')}</div>
+            <div class="ol-result-author">${escHtml(b.author || 'Autor desconhecido')} ${b.publishYear ? '· ' + b.publishYear : ''}</div>
+        </div>
+    `).join('');
+}
+
+function importOLBook(book) {
+    openBookModal({
+        title: book.title,
+        author: book.author,
+        isbn: book.isbn,
+    });
+    toast('Dados importados! Revise e salve.', 'success');
+}
+
+// ── Helpers ──
+function showError(el, msg) {
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+
+function toast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+
+// Close modal on overlay click
+document.getElementById('book-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeBookModal();
+});
+
+// Enter key on search
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.getElementById('view-search-ol') && !document.getElementById('view-search-ol').classList.contains('hidden')) {
+        searchOpenLibrary();
+    }
+});
+</script>
+</body>
+</html>
