@@ -1,0 +1,12 @@
+.layout { display: flex; flex-direction: column; min-height: 100vh; }
+.header { background: var(--ink); color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+.header-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-icon { font-size: 1.5rem; }
+.header-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; letter-spacing: 0.01em; }
+.header-user { display: flex; align-items: center; gap: 16px; }
+.header-username { font-size: 0.9rem; opacity: 0.8; }
+.header-user .btn-ghost { color: rgba(255,255,255,0.7); }
+.header-user .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.main-content { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 32px 24px; }
+.footer { background: var(--paper-dark); border-top: 1px solid var(--border); padding: 16px 24px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }

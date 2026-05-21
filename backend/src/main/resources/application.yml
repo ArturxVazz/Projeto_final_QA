@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: biblioteca-pessoal
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/biblioteca}
+      database: ${MONGODB_DATABASE:biblioteca}
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    expiration: ${JWT_EXPIRATION:86400000}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

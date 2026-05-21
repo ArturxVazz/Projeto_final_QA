@@ -1,0 +1,51 @@
+.books-page { display: flex; flex-direction: column; gap: 24px; }
+.books-hero { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.books-hero-title { font-family: var(--font-display); font-size: 2.2rem; color: var(--ink); line-height: 1.2; }
+.books-hero-sub { color: var(--text-muted); margin-top: 4px; }
+.books-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+.stat-card:hover, .stat-card.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194,69,45,0.1); }
+.stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--ink); }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.books-filters { display: flex; gap: 12px; }
+.books-search { flex: 1; }
+.books-select { width: 200px; }
+.books-loading { text-align: center; padding: 80px; color: var(--text-muted); font-size: 1.1rem; }
+.books-empty { text-align: center; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.books-empty-icon { font-size: 4rem; }
+.books-empty h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }
+.books-empty p { color: var(--text-muted); max-width: 320px; }
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+.book-card { display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; }
+.book-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,26,46,0.12); }
+.book-card-header { display: flex; gap: 16px; padding: 20px 20px 14px; }
+.book-spine { width: 6px; border-radius: 3px; min-height: 60px; flex-shrink: 0; }
+.book-card-info { flex: 1; }
+.book-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.book-author { color: var(--text-muted); font-size: 0.875rem; margin-top: 3px; }
+.book-genre { font-size: 0.78rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+.book-card-body { padding: 0 20px 14px; flex: 1; }
+.book-description { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
+.book-meta { display: flex; gap: 12px; margin-top: 8px; font-size: 0.8rem; color: var(--text-muted); }
+.book-card-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.book-rating { color: var(--gold); font-size: 0.85rem; flex: 1; }
+.book-actions { display: flex; gap: 6px; margin-left: auto; }
+.book-actions .btn { padding: 6px 10px; font-size: 0.8rem; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(26,26,46,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+.modal { width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px 20px; border-bottom: 1px solid var(--border); }
+.modal-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--ink); }
+.modal-close { font-size: 1.1rem; }
+.modal-form { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.modal-full { grid-column: 1 / -1; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; padding-top: 8px; border-top: 1px solid var(--border); }
+
+@media (max-width: 640px) {
+  .books-stats { grid-template-columns: repeat(2, 1fr); }
+  .books-filters { flex-direction: column; }
+  .books-select { width: 100%; }
+  .modal-grid { grid-template-columns: 1fr; }
+}
